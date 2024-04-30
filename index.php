@@ -1,3 +1,8 @@
+<?php
+require('site-config/config_require.php');
+$db = new DB();
+$products = $db->index();
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -11,6 +16,7 @@
     <meta name="keywords" content="">
     <meta name="description" content="">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/cart.css">
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,7 +24,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <!-- script
     ================================================== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="js/modernizr.js"></script>
+    <script src="js/main.js"></script>
   </head>
   <body data-bs-spy="scroll" data-bs-target="#navbar" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" tabindex="0">
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -217,6 +225,7 @@
                           <svg class="cart">
                             <use xlink:href="#cart"></use>
                           </svg>
+                          <span class='badge badge-warning lblCartCount' id="cart-badge"> 0 </span>
                         </a>
                       </li>
                     </ul>
@@ -236,8 +245,8 @@
               <div class="row d-flex align-items-center">
                 <div class="col-md-6">
                   <div class="banner-content">
-                    <h1 class="display-2 text-uppercase text-dark pb-5">Your Products Are Great.</h1>
-                    <a href="shop.html" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">Shop Product</a>
+                    <h1 class="display-2 text-uppercase text-dark pb-5">Apple Products Are Great.</h1>
+                    <a href="#mobile-products" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">Shop Product</a>
                   </div>
                 </div>
                 <div class="col-md-5">
@@ -254,7 +263,7 @@
                 <div class="col-md-6">
                   <div class="banner-content">
                     <h1 class="display-2 text-uppercase text-dark pb-5">Technology Hack You Won't Get</h1>
-                    <a href="shop.html" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">Shop Product</a>
+                    <a href="#mobile-products" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">Shop Product</a>
                   </div>
                 </div>
                 <div class="col-md-5">
@@ -347,24 +356,28 @@
           </div>
           <div class="swiper product-swiper">
             <div class="swiper-wrapper">
+              <?php if($products): ?>
+                <?php foreach($products as $product): ?>
               <div class="swiper-slide">
                 <div class="product-card position-relative">
                   <div class="image-holder">
-                    <img src="images/product-item1.jpg" alt="product-item" class="img-fluid">
+                    <img src="<?php echo $base_url; ?>upload/images/<?php echo $product['image_name']; ?>" alt="product-item" class="img-fluid">
                   </div>
                   <div class="cart-concern position-absolute">
-                    <div class="cart-button d-flex">
-                      <a href="#" class="btn btn-medium btn-black">Add to Cart<svg class="cart-outline"><use xlink:href="#cart-outline"></use></svg></a>
+                    <div class="cart-button d-flex" id="add-cart" data-product="<?php echo htmlspecialchars($product['name']); ?>">
+                      <a class="btn btn-medium btn-black">Add to Cart<svg class="cart-outline"><use xlink:href="#cart-outline"></use></svg></a>
                     </div>
                   </div>
                   <div class="card-detail d-flex justify-content-between align-items-baseline pt-3">
                     <h3 class="card-title text-uppercase">
-                      <a href="#">Iphone 10</a>
+                      <a href="#"><?php echo $product['name'] ?></a>
                     </h3>
-                    <span class="item-price text-primary">$980</span>
+                    <span class="item-price text-primary">$<?php echo $product['price'] ?></span>
                   </div>
                 </div>
               </div>
+              <?php endforeach ?>
+              <?php endif ?>
               <div class="swiper-slide">
                 <div class="product-card position-relative">
                   <div class="image-holder">
